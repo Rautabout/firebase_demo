@@ -7,14 +7,18 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     final AuthService _auth = AuthService();
     final DatabaseService _database=DatabaseService();
-
+    void _openEndDrawer(){
+      _scaffoldKey.currentState.openEndDrawer();
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black87,
           title: SizedBox(
             child: TextField(
+              cursorColor: Colors.white,
                 textInputAction: TextInputAction.search,
                 onSubmitted: (String value){
 
@@ -33,8 +37,19 @@ class Home extends StatelessWidget {
                 textAlign: TextAlign.center),
           ),
         actions: [
-          IconButton(icon: Icon(Icons.search,color: Colors.white)),
-          IconButton(icon: Icon(Icons.filter_list_alt,color: Colors.white))
+          IconButton(icon: Icon(Icons.search,color: Colors.white),onPressed: (){},),
+          Builder(
+            builder: (context){
+              return IconButton(icon: Icon(
+                  Icons.filter_list_alt,
+                  color: Colors.white
+              ),
+                  onPressed: (){
+                Scaffold.of(context).openEndDrawer();
+              });
+            },
+          ),
+
         ],
       ),
       body: Container(
@@ -87,7 +102,7 @@ class Home extends StatelessWidget {
                                 leading: Icon(Icons.add,color: Colors.white),
                                 title: Text('Add new',style: TextStyle(color: Colors.white)),
                               onTap: (){
-                                  _database.addNewGame('Tetris', 'lorem ipsum dolor sit amet', 'Puzzle', '3/5', 69, false);
+                                  _database.addNewGame('Tetris', 'I dont know', 'Puzzle', 69, true);
                               },
 
                             ),
@@ -106,6 +121,20 @@ class Home extends StatelessWidget {
             )
           ],
         ),
+        ),
+      ),
+      endDrawer: Drawer(
+        child: Container(
+          color: Colors.black87,
+          child: Center(
+            child: Text(
+              "Profile",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30
+              ),
+            ),
+          ),
         ),
       ),
     );

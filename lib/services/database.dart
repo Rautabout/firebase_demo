@@ -9,16 +9,25 @@ class DatabaseService{
 
   final CollectionReference _gamesCollection=FirebaseFirestore.instance.collection('games');
 
-  Future addNewGame(String title, String description,String genre, String grade,double timePlayed,bool wasPlayed)async{
+  Future addNewGame(String title, String producer,String genre, int timePlayed, bool wasPlayed)async{
     try{
-      await _gamesCollection.doc(firebaseUser.uid).collection('gameID').add({
-        'title':title.trim(),
-        'description':description.trim(),
-        'genre':genre.trim(),
-        'grade':grade.trim(),
-        'timePlayed':timePlayed.toString().trim(),
-        'wasPlayed':false,
-      });
+      if(timePlayed>0) {
+        await _gamesCollection.doc(firebaseUser.uid).collection('gameID').add({
+          'title': title.trim(),
+          'description': producer.trim(),
+          'genre': genre.trim(),
+          'timePlayed': timePlayed.toString().trim(),
+          'wasPlayed': true,
+        });
+      }else{
+        await _gamesCollection.doc(firebaseUser.uid).collection('gameID').add({
+          'title': title.trim(),
+          'description': producer.trim(),
+          'genre': genre.trim(),
+          'timePlayed': timePlayed.toString().trim(),
+          'wasPlayed': false,
+        });
+      }
     } catch(e){
       print(e.toString());
       return null;

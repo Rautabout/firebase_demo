@@ -38,7 +38,7 @@ class _SignUpState extends State<SignUp>{
                 height: 10.0,
               ),
               Container(
-                width: 200.0,
+                width: 250.0,
                 child: TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   style: TextStyle(color: Colors.black),
@@ -83,7 +83,7 @@ class _SignUpState extends State<SignUp>{
                 height: 10.0,
               ),
               SizedBox(
-                width: 200.0,
+                width: 250.0,
                 child: TextFormField(
 
                   keyboardType: TextInputType.visiblePassword,
@@ -100,7 +100,7 @@ class _SignUpState extends State<SignUp>{
                     ),
                   ),
                   style: TextStyle(color: Colors.black),
-                  validator: (val)=>val.length<6?'Password must contain at least 6 characters!':null,
+                  validator: (val)=>val.length<6?'Password be at least 6 characters!':null,
                   obscureText: true,
                   onChanged: (val){
                     setState(() =>_password=val);

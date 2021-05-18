@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(
           textSelectionTheme: TextSelectionThemeData(
-            cursorColor: Colors.white,
+            cursorColor: Colors.black,
           ),
             inputDecorationTheme: InputDecorationTheme(
               focusedBorder: UnderlineInputBorder(
