@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       child: MaterialApp(
         theme: ThemeData(
+          accentColor: Colors.black45,
           textSelectionTheme: TextSelectionThemeData(
             cursorColor: Colors.black,
           ),

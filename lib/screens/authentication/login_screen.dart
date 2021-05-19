@@ -87,7 +87,6 @@ class _SignInState extends State<SignIn>{
                 child: TextFormField(
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-
                     fillColor: Colors.white,
                     filled: true,
                     enabledBorder: OutlineInputBorder(
