@@ -1,19 +1,23 @@
+import 'package:firebase_demo/services/database.dart';
 import 'package:flutter/material.dart';
-class FormEdit extends StatefulWidget {
-  const FormEdit({Key key}) : super(key: key);
+
+
+class FormNew extends StatefulWidget {
+  const FormNew({Key key}) : super(key: key);
 
   @override
-  _FormEditState createState() => _FormEditState();
+  _FormNewState createState() => _FormNewState();
 }
 
-class _FormEditState extends State<FormEdit> {
+class _FormNewState extends State<FormNew> {
   final _formKey=GlobalKey<FormState>();
-  String _currentTitle;
-  String _currentProducer;
-  String _currentGenre;
-  int _currentPlayedTime;
-  bool _currentWasPlayed;
+  final DatabaseService _database=DatabaseService();
 
+  String _title;
+  String _producer;
+  String _genre;
+  int _timePlayed;
+  bool _wasPlayed;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,7 @@ class _FormEditState extends State<FormEdit> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text('Edit Game',
+                Text('New Game',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 25.0,
@@ -65,7 +69,7 @@ class _FormEditState extends State<FormEdit> {
                       else return null;
                     },
                     onChanged: (val){
-                      //setState(() =>_title=val);
+                      setState(() =>_title=val);
                     },
                   ),
                 ),
@@ -101,7 +105,7 @@ class _FormEditState extends State<FormEdit> {
                       else return null;
                     },
                     onChanged: (val){
-                      //setState(() =>_producer=val);
+                      setState(() =>_producer=val);
                     },
                   ),
                 ),
@@ -137,7 +141,7 @@ class _FormEditState extends State<FormEdit> {
                       else return null;
                     },
                     onChanged: (val){
-                      //setState(() =>_genre=val);
+                      setState(() =>_genre=val);
                     },
                   ),
                 ),
@@ -180,16 +184,15 @@ class _FormEditState extends State<FormEdit> {
                       }
                       else return null;
                     },
-                    // onChanged: (val){ setState(() {
-                    //   _timePlayed=int.parse(val);
-                    //   if(_timePlayed==0){
-                    //     _wasPlayed=false;
-                    //   }
-                    //   else{
-                    //     _wasPlayed=true;
-                    //   }
-                    // });
-                    //},
+                    onChanged: (val){ setState(() {
+                      _timePlayed=int.parse(val);
+                      if(_timePlayed==0){
+                        _wasPlayed=false;
+                      }
+                      else{
+                        _wasPlayed=true;
+                      }
+                    });},
                   ),
                 ),
                 SizedBox(
@@ -204,7 +207,7 @@ class _FormEditState extends State<FormEdit> {
                   ),
                   onPressed: () async{
                     if(_formKey.currentState.validate()){
-                      //_database.addNewGame(_title, _producer, _genre, _timePlayed, _wasPlayed);
+                      _database.addNewGame(_title, _producer, _genre, _timePlayed, _wasPlayed);
                       Navigator.of(context).pop();
                     }
                     //_database.addNewGame('Tetris', 'Dont I', 'Puzzle', 69, true);

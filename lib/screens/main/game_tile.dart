@@ -9,12 +9,8 @@ class GameTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _showGameSetting(){
-      
-      showModalBottomSheet(context: context, builder: (context){
-        return Container(
-          color: Colors.black87,
-          child: FormEdit(),
-        );
+      showDialog(context: context, builder: (context){
+        return FormEdit();
       });
     }
 

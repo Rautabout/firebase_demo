@@ -1,5 +1,6 @@
 import 'package:firebase_demo/models/game.dart';
 import 'package:firebase_demo/screens/main/games_list.dart';
+import 'package:firebase_demo/screens/main/new_form.dart';
 import 'package:firebase_demo/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_demo/services/auth.dart';
@@ -16,6 +17,11 @@ class Home extends StatelessWidget {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     final AuthService _auth = AuthService();
     final DatabaseService _database=DatabaseService();
+    void _showAddGame(){
+      showDialog(context: context, builder: (context){
+        return FormNew();
+      });
+    }
 
     return StreamProvider<List<Game>>.value(
       value: DatabaseService().games,
@@ -50,9 +56,11 @@ class Home extends StatelessWidget {
                     Icons.filter_list_alt,
                     color: Colors.white
                 ),
-                    onPressed: (){
+                    onPressed: ()
+                    {
                   Scaffold.of(context).openEndDrawer();
-                });
+                }
+                );
               },
             ),
 
@@ -97,7 +105,7 @@ class Home extends StatelessWidget {
                                   title: Text('Add new',style: TextStyle(color: Colors.white)),
                                 onTap: (){
                                     Navigator.of(context).pop();
-                                    //_database.addNewGame('Tetris', 'Dont I', 'Puzzle', 69, true);
+                                    _showAddGame();
                                 },
 
                               ),
