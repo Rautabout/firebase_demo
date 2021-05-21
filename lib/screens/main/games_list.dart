@@ -15,16 +15,9 @@ class _GamesListState extends State<GamesList> {
   Widget build(BuildContext context) {
 
     final games=Provider.of<List<Game>>(context)??[];
-    games.forEach((game) {
-      print(game.title);
-      print(game.producer);
-      print(game.genre);
-      print(game.timePlayed);
-      print(game.wasPlayed);
-    });
 
     return ListView.builder(
-
+        physics: NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: games.length,

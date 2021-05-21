@@ -1,24 +1,29 @@
+import 'package:firebase_demo/models/game.dart';
+import 'package:firebase_demo/services/database.dart';
 import 'package:flutter/material.dart';
 class FormEdit extends StatefulWidget {
-  const FormEdit({Key key}) : super(key: key);
-
+  const FormEdit({Key key, this.game}) : super(key: key);
+  final Game game;
   @override
   _FormEditState createState() => _FormEditState();
 }
 
 class _FormEditState extends State<FormEdit> {
   final _formKey=GlobalKey<FormState>();
+  final DatabaseService _database=DatabaseService();
+
   String _currentTitle;
   String _currentProducer;
   String _currentGenre;
   int _currentPlayedTime;
-  bool _currentWasPlayed;
+
 
 
   @override
   Widget build(BuildContext context) {
+
     return AlertDialog(
-      backgroundColor: Color(0xff1c1c1c),
+      backgroundColor: Color(0xff2d2d2d),
 
       content: Container(
         height: 400.0,
@@ -46,6 +51,7 @@ class _FormEditState extends State<FormEdit> {
                 Container(
                   width: 250.0,
                   child: TextFormField(
+                    initialValue: widget.game.title,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                       fillColor: Colors.white,
@@ -65,7 +71,7 @@ class _FormEditState extends State<FormEdit> {
                       else return null;
                     },
                     onChanged: (val){
-                      //setState(() =>_title=val);
+                      setState(() =>_currentTitle=val);
                     },
                   ),
                 ),
@@ -82,6 +88,7 @@ class _FormEditState extends State<FormEdit> {
                 Container(
                   width: 250.0,
                   child: TextFormField(
+                    initialValue: widget.game.producer,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                       fillColor: Colors.white,
@@ -101,7 +108,7 @@ class _FormEditState extends State<FormEdit> {
                       else return null;
                     },
                     onChanged: (val){
-                      //setState(() =>_producer=val);
+                      setState(() =>_currentProducer=val);
                     },
                   ),
                 ),
@@ -118,6 +125,7 @@ class _FormEditState extends State<FormEdit> {
                 Container(
                   width: 250.0,
                   child: TextFormField(
+                    initialValue: widget.game.genre,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                       fillColor: Colors.white,
@@ -137,7 +145,7 @@ class _FormEditState extends State<FormEdit> {
                       else return null;
                     },
                     onChanged: (val){
-                      //setState(() =>_genre=val);
+                      setState(() =>_currentGenre=val);
                     },
                   ),
                 ),
@@ -155,6 +163,7 @@ class _FormEditState extends State<FormEdit> {
                 Container(
                   width: 250.0,
                   child: TextFormField(
+                    initialValue: widget.game.timePlayed.toString(),
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -180,16 +189,10 @@ class _FormEditState extends State<FormEdit> {
                       }
                       else return null;
                     },
-                    // onChanged: (val){ setState(() {
-                    //   _timePlayed=int.parse(val);
-                    //   if(_timePlayed==0){
-                    //     _wasPlayed=false;
-                    //   }
-                    //   else{
-                    //     _wasPlayed=true;
-                    //   }
-                    // });
-                    //},
+                    onChanged:  (val){ setState(() {
+                      _currentPlayedTime=int.tryParse(val);
+                    });
+                    },
                   ),
                 ),
                 SizedBox(
@@ -203,13 +206,22 @@ class _FormEditState extends State<FormEdit> {
                     style: TextStyle(color: Colors.black),
                   ),
                   onPressed: () async{
+                    if(_currentTitle==null){
+                      _currentTitle=widget.game.title;
+                    }
+                    if(_currentProducer==null){
+                      _currentProducer=widget.game.producer;
+                    }
+                    if(_currentGenre==null){
+                      _currentGenre=widget.game.genre;
+                    }
+                    if(_currentPlayedTime==null){
+                      _currentPlayedTime=widget.game.timePlayed;
+                    }
                     if(_formKey.currentState.validate()){
-                      //_database.addNewGame(_title, _producer, _genre, _timePlayed, _wasPlayed);
+                      _database.updateGame(widget.game.gameID,_currentTitle, _currentProducer, _currentGenre, _currentPlayedTime);
                       Navigator.of(context).pop();
                     }
-                    //_database.addNewGame('Tetris', 'Dont I', 'Puzzle', 69, true);
-                    //Navigator.of(context).pop();
-
                   },
                 ),
               ],

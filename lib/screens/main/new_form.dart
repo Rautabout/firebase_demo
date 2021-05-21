@@ -17,12 +17,11 @@ class _FormNewState extends State<FormNew> {
   String _producer;
   String _genre;
   int _timePlayed;
-  bool _wasPlayed;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Color(0xff1c1c1c),
+      backgroundColor: Color(0xff2d2d2d),
 
       content: Container(
         height: 400.0,
@@ -186,12 +185,6 @@ class _FormNewState extends State<FormNew> {
                     },
                     onChanged: (val){ setState(() {
                       _timePlayed=int.parse(val);
-                      if(_timePlayed==0){
-                        _wasPlayed=false;
-                      }
-                      else{
-                        _wasPlayed=true;
-                      }
                     });},
                   ),
                 ),
@@ -207,7 +200,7 @@ class _FormNewState extends State<FormNew> {
                   ),
                   onPressed: () async{
                     if(_formKey.currentState.validate()){
-                      _database.addNewGame(_title, _producer, _genre, _timePlayed, _wasPlayed);
+                      _database.addNewGame(_title, _producer, _genre, _timePlayed);
                       Navigator.of(context).pop();
                     }
                     //_database.addNewGame('Tetris', 'Dont I', 'Puzzle', 69, true);

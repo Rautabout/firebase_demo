@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_demo/services/auth.dart';
 import 'package:provider/provider.dart';
 
-import 'edit_form.dart';
-
 
 class Home extends StatelessWidget {
   const Home({Key key}) : super(key: key);
@@ -24,10 +22,11 @@ class Home extends StatelessWidget {
     }
 
     return StreamProvider<List<Game>>.value(
-      value: DatabaseService().games,
+      value: DatabaseService().allGames,
       child: Scaffold(
+        backgroundColor: Color(0xff686868),
         appBar: AppBar(
-          backgroundColor: Colors.black87,
+          backgroundColor: Color(0xff2d2d2d),
             title: SizedBox(
               child: TextField(
                 cursorColor: Colors.white,
@@ -35,7 +34,6 @@ class Home extends StatelessWidget {
                   onSubmitted: (String value){
 
                   },
-                  //controller: _cityTextController,
                   decoration: InputDecoration(
                     hintText: "Search",
                     hintStyle: TextStyle(
@@ -66,17 +64,17 @@ class Home extends StatelessWidget {
 
           ],
         ),
-        body: Container(
-          color: Colors.black54,
-          child: Column(
-            children: [
-              GamesList(),
-            ],
+        body: SingleChildScrollView(
+            physics: ScrollPhysics(),
+              child: Column(
+                children: <Widget>[
+                  GamesList(),
+                ],
+              ),
           ),
-        ),
         drawer: Drawer(
           child: Container(
-            color: Colors.black87,
+            color: Color(0xff686868),
             child: Column(
               children: <Widget>[
               Expanded(
@@ -85,7 +83,7 @@ class Home extends StatelessWidget {
                   children: <Widget>[
                     DrawerHeader(child: Text('Menu',style: TextStyle(color: Colors.white,fontSize: 20.0)),
                       decoration: BoxDecoration(
-                      color: Colors.black45,
+                      color: Color(0xff2d2d2d),
                       ),
                     ),
                   ],
@@ -96,7 +94,7 @@ class Home extends StatelessWidget {
                   child: Align(
                       alignment: FractionalOffset.bottomCenter,
                       child: Container(
-                        color: Colors.black45,
+                        color: Color(0xff2d2d2d),
                           child: Column(
                             children: <Widget>[
                               Divider(),
@@ -128,7 +126,7 @@ class Home extends StatelessWidget {
         ),
         endDrawer: Drawer(
           child: Container(
-            color: Colors.black87,
+            color: Color(0xff2d2d2d),
             child: Center(
               child: Text(
                 "Profile",

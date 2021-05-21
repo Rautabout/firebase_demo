@@ -9,21 +9,15 @@ class GameTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _showGameSetting(){
+      //print(game.gameID);
       showDialog(context: context, builder: (context){
-        return FormEdit();
+        return FormEdit(game: game);
       });
-    }
-
-    if(game.timePlayed>0){
-      game.wasPlayed=true;
-    }
-    else{
-      game.wasPlayed=false;
     }
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
-        color: Colors.black54,
+        color: Color(0xff2d2d2d),
         margin: EdgeInsets.fromLTRB(5.0, 6.0, 5.0, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,7 +37,8 @@ class GameTile extends StatelessWidget {
                       Icons.edit,
                       size: 30.0,
                       color: Colors.white,
-                  ), onPressed: ()=>_showGameSetting())
+                  ),
+                    onPressed: ()=>_showGameSetting()),
               ],
             ),
             Row(
@@ -91,12 +86,6 @@ class GameTile extends StatelessWidget {
 
           ],
         ),
-        // child: ListTile(
-        //   leading: Text(game.timePlayed.toString()),
-        //   title: Text(game.title),
-        //   subtitle: Text(game.producer),
-        //   trailing: Icon(Icons.edit),
-        // ),
       ),
     );
   }
