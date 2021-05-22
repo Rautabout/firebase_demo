@@ -12,6 +12,10 @@ class DatabaseService{
 
   final CollectionReference _gamesCollection=FirebaseFirestore.instance.collection('games');
 
+  DatabaseService({
+    this.searchGame
+  });
+
 
   //games list
   List<Game> _game(QuerySnapshot snapshot){
@@ -99,6 +103,12 @@ class DatabaseService{
   Stream<List<Game>> get unplayedGames{
     final CollectionReference unplayedCollection=_gamesCollection.doc(firebaseUser.uid).collection('gameID');
     final Query unplayed=unplayedCollection.where("wasPlayed",isEqualTo: false);
+    return unplayed.snapshots().map(_game);
+  }
+  final String searchGame;
+  Stream<List<Game>> get searchTitle{
+    final CollectionReference unplayedCollection=_gamesCollection.doc(firebaseUser.uid).collection('gameID');
+    Query unplayed=unplayedCollection.where("title",);
     return unplayed.snapshots().map(_game);
   }
 

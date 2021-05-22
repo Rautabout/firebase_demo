@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_demo/screens/main/edit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_demo/models/game.dart';
@@ -13,6 +15,12 @@ class GameTile extends StatelessWidget {
       showDialog(context: context, builder: (context){
         return FormEdit(game: game);
       });
+    }
+    void _deleteItem(){
+      var firestoreInstance=FirebaseFirestore.instance;
+      var currentUser=FirebaseAuth.instance.currentUser;
+      firestoreInstance.collection('games').doc(currentUser.uid)
+          .collection('gameID').doc(game.gameID).delete();
     }
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
@@ -80,7 +88,9 @@ class GameTile extends StatelessWidget {
                     Icons.delete_forever,
                   size: 30.0,
                   color: Colors.white,
-                ), onPressed: (){})
+                ), onPressed: (){
+                  _deleteItem();
+                })
               ],
             ),
 
