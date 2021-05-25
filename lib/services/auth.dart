@@ -19,13 +19,21 @@ class AuthService{
 
   //sign in
   Future signIn(String email,String password) async{
+
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       User user = result.user;
       return _user(user);
     } catch(e){
-      print(e.toString());
-      return null;
+      if(e.toString() == '[firebase_auth/wrong-password] The password is invalid or the user does not have a password.'){
+        return 1;
+      }
+      else if(e.toString() =='[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.'){
+        return 2;
+      }
+      else{
+        return 3;
+      }
     }
   }
   //sign up
@@ -35,8 +43,12 @@ class AuthService{
       User user=result.user;
       return _user(user);
     }catch(e){
-      print(e.toString());
-      return null;
+      if(e.toString() == '[firebase_auth/email-already-in-use] The email address is already in use by another account.'){
+        return 1;
+      }
+      else{
+        return 2;
+      }
     }
   }
   //sign out
@@ -44,8 +56,15 @@ class AuthService{
     try{
       return await _auth.signOut();
     }catch(e){
-      print(e.toString());
-      return null;
+      if(e.toString() == '[firebase_auth/wrong-password] The password is invalid or the user does not have a password.'){
+        return 1;
+      }
+      else if(e.toString() =='[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.'){
+        return 2;
+      }
+      else{
+        return 3;
+      }
     }
   }
 

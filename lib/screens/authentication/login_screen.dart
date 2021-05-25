@@ -118,7 +118,13 @@ class _SignInState extends State<SignIn>{
                   if(_formKey.currentState.validate()) {
                     dynamic result = await _auth.signIn(
                         _email, _password);
-                    if (result == null) {
+                    if (result == 1) {
+                      setState(() => _error = 'Wrong password!');
+                    }
+                    else if(result==2){
+                      setState(() => _error = 'User does not exist!');
+                    }
+                    else if(result==3){
                       setState(() => _error = 'Something went wrong');
                     }
                   }

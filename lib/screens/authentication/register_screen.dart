@@ -115,7 +115,10 @@ class _SignUpState extends State<SignUp>{
                   if(_formKey.currentState.validate()) {
                     dynamic result = await _auth.signUp(
                         _email, _password);
-                    if (result == null) {
+                    if (result == 1) {
+                      setState(() => _error = 'User already exists!');
+                    }
+                    else if(result==2){
                       setState(() => _error = 'Something went wrong');
                     }
                   }
