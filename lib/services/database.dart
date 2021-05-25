@@ -16,7 +16,7 @@ class DatabaseService{
 
   //games list
   List<Game> _game(QuerySnapshot snapshot){
-    return snapshot.docs.map((doc){
+    return snapshot.docs.map<Game>((doc){
       return Game(
         gameID:doc.id,
         title: doc.data()['title']??'',
@@ -67,6 +67,7 @@ class DatabaseService{
     try{
       if(timePlayed>0) {
         await _gamesCollection.doc(firebaseUser.uid).collection('gameID').doc(gameID).set({
+          'gameID': gameID,
           'title': title.trim(),
           'producer': producer.trim(),
           'genre': genre.trim(),
@@ -75,6 +76,7 @@ class DatabaseService{
         });
       }else{
         await _gamesCollection.doc(firebaseUser.uid).collection('gameID').doc(gameID).set({
+          'gameID': gameID,
           'title': title.trim(),
           'producer': producer.trim(),
           'genre': genre.trim(),

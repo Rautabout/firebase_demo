@@ -8,6 +8,7 @@ import 'package:firebase_demo/services/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_demo/services/auth.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -21,8 +22,8 @@ enum _listSelection { allGames, playedGames, unplayedGames, searchedGames }
 
 class _HomeState extends State<Home> {
   final firebaseUser = FirebaseAuth.instance.currentUser;
-
-  final _searchController = TextEditingController();
+  String searchValue='';
+  TextEditingController _searchController = TextEditingController();
   final DatabaseService _database = DatabaseService();
   _listSelection _selection = _listSelection.allGames;
   void changeSelection(_listSelection value) {
@@ -41,22 +42,22 @@ class _HomeState extends State<Home> {
     });
   }
 
-  List<Game> _game(QuerySnapshot snapshot){
-    return snapshot.docs.map((doc){
-      return Game(
-          gameID:doc.id,
-          title: doc.data()['title']??'',
-          producer: doc.data()['producer']??'',
-          genre: doc.data()['genre']??'',
-          timePlayed: doc.data()['timePlayed']??0,
-          wasPlayed: doc.data()['wasPlayed']??false
-      );
-    }).toList();
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchChanged);
+  }
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  _onSearchChanged() {
   }
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     final AuthService _auth = AuthService();
     void _showAddGame() {
       showDialog(
@@ -72,10 +73,17 @@ class _HomeState extends State<Home> {
         backgroundColor: Color(0xff2d2d2d),
         title: SizedBox(
           child: TextField(
-            onSubmitted: (String value) {
-
+            onSubmitted: (searchValue) {
+              setState(() {
+                if(searchValue==''){
+                  _selection=_listSelection.allGames;
+                }
+                else {
+                  _searchController.text = searchValue.toLowerCase();
+                  _selection = _listSelection.searchedGames;
+                }
+              });
             },
-            controller: _searchController,
             cursorColor: Colors.white,
             decoration: InputDecoration(
               hintText: "Search",
@@ -92,6 +100,9 @@ class _HomeState extends State<Home> {
               return IconButton(
                   icon: Icon(Icons.filter_list_alt, color: Colors.white),
                   onPressed: () {
+                    setState(() {
+                      _selection=_listSelection.allGames;
+                    });
                     Scaffold.of(context).openEndDrawer();
                   });
             },
@@ -103,16 +114,12 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             Visibility(
+              visible: _selection == _listSelection.searchedGames,
+              child: StreamProvider<List<Game>>.value(
+                  value: _database.allGames, child: SearchList(_searchController.text)),
+            ),
+            Visibility(
               visible: _selection == _listSelection.allGames,
-              // child: ListView.builder(
-              //     physics: NeverScrollableScrollPhysics(),
-              //     scrollDirection: Axis.vertical,
-              //     shrinkWrap: true,
-              //     itemCount: _games.length,
-              //     itemBuilder: (context,index){
-              //       return GameTile(game:_games[index]);
-              //     }
-              // ),
               child: StreamProvider<List<Game>>.value(
                   value: _database.allGames, child: GamesList()),
             ),
@@ -229,5 +236,36 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+}
+
+class SearchList extends StatefulWidget {
+  final String searchController;
+  SearchList(this.searchController);
+
+  @override
+  State<StatefulWidget> createState() => _SearchList();
+}
+
+class _SearchList extends State<SearchList> {
+  @override
+  Widget build(BuildContext context) {
+    final games = Provider.of<List<Game>>(context) ?? [];
+
+    final List<Game> games2 = [];
+    games.forEach((game) {
+      if (game.title.toLowerCase().contains(widget.searchController)) {
+        games2.add(game);
+      }
+    });
+
+    return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: games2.length,
+        itemBuilder: (context, index) {
+          return GameTile(game: games2[index]);
+        });
   }
 }
